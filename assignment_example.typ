@@ -1,51 +1,64 @@
 #import "template.typ": *
-#let title = "Assignment #4"
-#let author = "Alice Bob"
-#let course_id = "CS101"
-#let instructor = "Turing, Alan"
-#let semester = "Spring 2023"
-#let due_time = "April 3 at 23:59"
-#set enum(numbering: "a)")
-#show: assignment_class.with(title, author, course_id, instructor, semester, due_time)
+#let title = "标题名"
+#let author = "作者名"
+#let course_id = "课程名"
+#let instructor = "教师名"
+#let semester = "学期"
+#let due_time = "DDL"
+#let id = "123456789"
+#set enum(numbering: "1.") // 设置编号格式，可以改成 a.
+#show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id)
+#show raw: set text(font: (font.mono, font.cjk))
+#set par(first-line-indent: 2em)
+#let fake_par = {
+  v(-1em)
+  box()
+}
+#show heading: it => {
+  it
+  fake_par
+}
+
+// ----------------正文----------------
+
+= 一级标题
+
+默认字体：IBM Plex Serif, 思源宋体
+
+代码块字体：`SF Mono`
+
+== 二级标题
+
+这个模板可以用来当作作业的模板，也可以用来写笔记。
+
+加入了中文的段前缩进，以及代码块的字体设置。
+
+=== 三级标题
+
+可以使用 `#p[]`、`#prob[]`、`#pt("...")` 来创建问题框。
+
+= 示例
 
 #prob[
-// + $A=mat(1,-1;-1,1;1,1)$
-1. when $min(norm(bold(x))_2)$, $bold(x) = bold(x^*)$ is the solution to the problem, which is $x^*=vec(1/sqrt(3),1/sqrt(3),1/sqrt(3))$
 
-2. We have a matrix $bold(A) = mat(1,1;1,1;1,0)$, the projection operator is $ bold(P) = bold(A)(bold(A)^T A)^(-1)bold(A)^T = mat(1/2,1/2,0;1/2,1/2,0;0,0,1), $ hence, $ bold(x^*) = bold(P) bold(v)  = vec(1/2,1/2,1). $ 
+使用 `#prob` 命令来创建一个带*编号*的问题框。
 
-3. We have a  matrix $bold(A) = mat(1,-1;-1,1;2,2)$, the projection operator is $ bold(P) = bold(A)(bold(A)^T A)^(-1)bold(A)^T = mat(1/2,-1/2,0;-1/2,1/2,0;0,0,1), $ hence, $ bold(x^*) = bold(P) bold(v)  = vec(1/2,-1/2,0). $
 ]
 
-#prob[
-// + $ op("prox")_g (bold(y)) = arg min_(bold(x in RR ^n)) {1/2 norm(bold(x)-bold(y))^2 + g(bold(x))}. $ 
-1. we know that:
-$ prox_phi (z) = argmin_(x in RR) {1/2 norm(x-z)^2 + phi.alt(x-c)}. $ 
-let $x prime =x-c$ $ op("prox")_phi (z) = argmin_(x in RR) {1/2 norm(x prime-(z-c))^2 + phi.alt(x'+c-c)}+c = op("prox")_phi.alt (z-c)+c. $
+#pt("或者")[
 
-2. if we want to $ f(x) = 1/2 norm(x-z)^2 + phi.alt(x)$ to be minimized, we need to find the $x$ that makes the derivative of the function equal to zero.
-we know 
-$ diff f(x) =  cases(x-z + lambda "when " x>0, [x-z - lambda,x-z + lambda] "when" x=0, x-z - lambda "when" x<0)  $. 
-Hence, let $ diff f(x) = 0 $, we have
-$ prox_phi.alt(z) = x^* = cases(z-lambda "when " z>lambda,
-[z-lambda,z+lambda] "when" z in [-lambda,lambda],
- z + lambda "when" z < -lambda) . $
- 
-3. if $phi(x) = lambda abs(x-c)$, where $c in RR$ and $lambda>0$. Use the result from part a. 
-$ prox_phi(z) = prox_phi.alt(z-c)+c  = cases(z-lambda "when " z>lambda + c,
-[z-lambda,z+lambda] "when" z in [-lambda+c,lambda+c],
- z + lambda "when" z < -lambda+c) $
+使用 `#pt("...")` 命令来创建一个不带编号、可自定义文本的问题框。
+
+比如，本框使用的命令是 `#pt("或者")`。
+
 ]
 
-#prob[
-1. If we take the derivative of $1/2 norm(bold(x)-bold(x)^(t-1))^2 + gamma g(bold(x))$, we have
-$ bold(x^t) = prox_(gamma g)(bold(x)^(t-1)) =  bold(x)^(t-1) - gamma nabla g(bold(x^t)) $
+而如果你想只想要一个问题框：
 
-2. By the convexity of $g$, we know that $g(bold(x)^(t)) +nabla g(bold(x^(t)))^T (bold(x)^(t-1)-bold(x^t))<= g(bold(x^(t-1)))$. Hence, we have
-$ g(bold(x)^(t)) <= g(bold(x^(t-1))) - nabla g(bold(x^(t)))^T (bold(x)^(t-1)-bold(x^t)) = g(bold(x^(t-1))) - gamma nabla norm(g(bold(x^(t))))^2_2 $
+#p[
 
-3. because $bold(x^t) =  bold(x)^(t-1) - gamma nabla g(bold(x^t))$ which is a gradient descent method, so
-$ -oo<g(bold(x)^t)<=g(bold(x)^(t-1)) $ and we have $ g(bold(x)^(t)) <=  g(bold(x^(t-1))) - gamma nabla norm(g(bold(x^(t))))^2_2 $ hence $ 0<=gamma nabla norm(g(bold(x^(t))))^2_2<=0 $ if $ t arrow +oo $
+使用 `#p` 命令来创建一个空白的问题框。
+
 ]
 
 #prob[
