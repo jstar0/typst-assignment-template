@@ -1,43 +1,53 @@
+
 #let font = (
   main: "IBM Plex Serif",
   mono: "SF Mono",
   cjk: "Source Han Serif SC",
 )
 
-#show raw: set text(font: (font.mono, font.cjk))
-
 #let problem_counter = counter("problem")
 
+// 空白的 problem block
 #let p(body) = {
   // let current_problem = problem_counter.step()
   // [*#text*]
+  v(-0.5em)
   block(fill:rgb(250, 255, 250),
    width: 100%,
    inset:8pt,
    radius: 4pt,
    stroke:rgb(31, 199, 31),
    body)
+  v(-0.5em)
   }
 
+// 可自定义文本的 problem block
 #let pt(text, body) = {
   // let current_problem = problem_counter.step()
+  v(0.2em)
   [*#text*]
+  v(-0.5em)
   block(fill:rgb(250, 255, 250),
    width: 100%,
    inset:8pt,
    radius: 4pt,
    stroke:rgb(31, 199, 31),
    body)
+  v(-0.5em)
   }
 
-#let prob(body) = {
+// 自动编号的 problem block
+#let prob(text, body) = {
   // let current_problem = problem_counter.step()
-  [== Problem #problem_counter.step() #problem_counter.display()]
-  block(fill:rgb(250, 255, 250),
+  v(1em)
+  [*问题 #problem_counter.step() #problem_counter.display()：*#text]
+  // v(0.5em)
+  block(
+    // fill:rgb(250, 255, 250),
    width: 100%,
-   inset:8pt,
-   radius: 4pt,
-   stroke:rgb(31, 199, 31),
+   inset:(left: 1em),
+  //  radius: 4pt,
+  //  stroke: rgb(31, 199, 31),
    body)
   }
 
@@ -45,14 +55,13 @@
 #let prox = [#math.op("prox")]
 #let proj = [#math.op("proj")]
 #let argmin = [#math.arg]+[#math.min]
-#set par(justify: true,first-line-indent: 2em)
-#show heading: it =>  {
-    it
-    par()[#text()[#h(0.0em)]]
-}
+
+
 
 // Initiate the document title, author...
 #let assignment_class(size: 10pt, title, author, course_id, professor_name, semester, due_time, id, body) = {
+  import "@preview/wrap-it:0.1.0": wrap-content
+  import "@preview/tablex:0.0.8": tablex, cellx, rowspanx, colspanx
   set text(font: (font.main, font.cjk), size: size, lang: "zh")
   set document(title: title, author: author)
   set page(
@@ -72,6 +81,7 @@
       let total_pages = counter(page).final(loc).last()
       align(center)[#page_number / #total_pages]
     }))
+  
   // block(height:25%,fill:none)
   line(length: 100%)
   align(left, text(17pt)[
@@ -100,6 +110,25 @@
   // align(left)[*#author* #id]
   
   // pagebreak(weak: false)
+  set raw(tab-size: 4)
+  
+  show raw: set text(font: (font.mono, font.cjk))
+  // Display inline code in a small box
+  // that retains the correct baseline.
+  show raw.where(block: false): box.with(
+    fill: luma(240),
+    inset: (x: 3pt, y: 0pt),
+    outset: (y: 3pt),
+    radius: 2pt,
+  )
+
+  // Display block code in a larger block
+  // with more padding.
+  show raw.where(block: true): block.with(
+    fill: luma(240),
+    inset: 10pt,
+    radius: 4pt,
+  )
   body
   
     // locate(loc => {
