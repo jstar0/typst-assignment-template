@@ -154,6 +154,9 @@
 
   // Display block code in a larger block
   // with more padding.
+  // and with line numbers.
+  // Thank you @Andrew15-5 for the idea and the code!
+  // https://github.com/typst/typst/issues/344#issuecomment-2041231063
   let style-number(number) = text(gray)[#number]
   show raw.where(block: true): it => block(
     fill: luma(240),
