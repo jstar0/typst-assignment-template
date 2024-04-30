@@ -17,14 +17,16 @@
    inset:8pt,
    radius: 4pt,
    stroke:rgb(31, 199, 31),
-   body)
+   body,
+   )
   v(-0.5em)
   }
+  
 
 // 可自定义文本的 problem block
 #let pt(text, body) = {
   // let current_problem = problem_counter.step()
-  v(0.2em)
+  // v(0.2em)
   [*#text*]
   v(-0.5em)
   block(fill:rgb(250, 255, 250),
@@ -33,22 +35,23 @@
    radius: 4pt,
    stroke:rgb(31, 199, 31),
    body)
-  v(-0.5em)
+  v(0.5em)
   }
 
 // 自动编号的 problem block
 #let prob(text, body) = {
   // let current_problem = problem_counter.step()
-  v(1em)
+  v(0.5em)
   [*问题 #problem_counter.step() #problem_counter.display()：*#text]
   // v(0.5em)
-  block(
-    // fill:rgb(250, 255, 250),
-   width: 100%,
-   inset:(left: 1em),
-  //  radius: 4pt,
-  //  stroke: rgb(31, 199, 31),
-   body)
+  // block(
+  //   // fill:rgb(250, 255, 250),
+  //  width: 100%,
+  //  inset:(left: 1em),
+  // //  radius: 4pt,
+  // //  stroke: rgb(31, 199, 31),
+  //  body)
+   body
   }
 
 // Some math operators
@@ -60,9 +63,31 @@
 
 // Initiate the document title, author...
 #let assignment_class(size: 10pt, title, author, course_id, professor_name, semester, due_time, id, body) = {
-  import "@preview/wrap-it:0.1.0": wrap-content
-  import "@preview/tablex:0.0.8": tablex, cellx, rowspanx, colspanx
+
+  show heading.where(
+    level: 1
+  ): it => [
+    #it
+    #v(0.2em)
+  ] 
+
+  show heading.where(
+    level: 2
+  ): it => [
+    #v(-0.3em)
+    #it
+  ]
+  
   set text(font: (font.main, font.cjk), size: size, lang: "zh")
+  set heading(numbering: (..args) => {
+    let nums = args.pos()
+    if nums.len() == 1 {
+      return numbering("一、", ..nums)
+    } else {
+      return numbering("1.1", ..nums)
+    }
+  })
+  set raw(tab-size: 4)
   set document(title: title, author: author)
   set page(
     paper:"a4",
@@ -85,20 +110,25 @@
   // block(height:25%,fill:none)
   line(length: 100%)
   align(left, text(17pt)[
-    *#course_id | #title*])
-  // align(center, text(10pt)[
-  //   截止时间：#due_time])
-  let right_text = [
-        *#professor_name*]+[*老师*,
-        *#semester*,
-        截止时间：*#due_time*
-      ]
+    *#title*])
+  
   let left_text = [
-    #id *#author*  
+    *#author* #id
   ]
+  let mid_text = [*#course_id* | 
+        *#professor_name*]+[*老师*,
+        *#semester*
+      ]
+  let right_text = [| *截止时间：*#due_time]
+
+  if due_time == none or due_time == "" {
+    right_text = []
+  }
+  
 
   left_text
   h(1fr)
+  mid_text
   right_text
   
   
@@ -124,11 +154,22 @@
 
   // Display block code in a larger block
   // with more padding.
-  show raw.where(block: true): block.with(
+  let style-number(number) = text(gray)[#number]
+  show raw.where(block: true): it => block(
     fill: luma(240),
     inset: 10pt,
     radius: 4pt,
-  )
+    width: 100%,
+  )[#grid(
+  columns: (1em, 1fr),
+  align: (right, left),
+  column-gutter: 0.7em,
+  row-gutter: 0.6em,
+  ..it.lines
+    .enumerate()
+    .map(((i, line)) => (style-number(i + 1), line))
+    .flatten()
+)]
   body
   
     // locate(loc => {
