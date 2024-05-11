@@ -1,88 +1,184 @@
 #import "template.typ": *
-#let title = "标题名"
-#let author = "作者名"
-#let course_id = "课程名"
-#let instructor = "教师名"
-#let semester = "学期"
-#let due_time = "DDL"
-#let id = "123456789"
+
+// ----------------参数----------------
+#let title = "An Example Assignment"
+#let author = "hongjr03"
+#let course_id = "Typst 5.011"
+#let instructor = "John"
+#let semester = "2024 Spring"
+#let due_time = "May 11, 2024"
+#let id = "17113945"
 
 #show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id)
 
 #set enum(numbering: "1.") // 设置编号格式，可以改成 a.
+
 // ----------------正文----------------
 
-= 一级标题
+= 开始
 
-默认字体：IBM Plex Serif, 思源宋体
+你说得对，但《Typst》是一款 #lorem(10)，后面忘了。
 
-代码块字体：`SF Mono`
+要开始使用此模板，你可以
 
-== 二级标题
++ 下载 `template.typ` 并在你的文档开头中使用 ```typ
+  #import "template.typ": *
+  ``` 来导入模板。
 
-这个模板可以用来当作作业的模板，也可以用来写笔记。
++ clone 本项目并在 `assignment_example.typ` 中进行编辑。
 
-加入了中文的段前缩进，以及代码块的字体设置。
+= 特性
 
-=== 三级标题
+本模板基于 #link("https://github.com/gRox167/typst-assignment-template")[gRox167 的 typst-assignment-template] 修改，缝合了许多作者喜欢的特性，包括：
 
-可以使用 `#p[]`、`#prob[][]`、`#pt[][]` 来创建问题框。
++ 自动编号的问题块
++ 自定义标题的特殊块
++ 引入 `numblex` 包，支持中文样式的标题编号
++ 美观整洁的排版
 
-= 示例
+= 使用
 
-#prob[这是一个问题的内容。][
+首先先在开头导入模板：
 
-使用 `#prob[问题内容][回答内容]` 命令来创建一个带*编号*的问题区域。
-
-]
-
-#pt[如果需要问题框][
-
-使用 `#pt[][]` 命令来创建一个不带编号、可自定义文本的问题框。
-
-比如，本框使用的命令是 `#pt[如果需要问题框][...]`。
-]
-
-
-
-而如果你想只想要一个问题框：
-
-#p[
-
-使用 `#p[]` 命令来创建一个空白的问题框。
-
-]
-
-#prob[当然][
-  #pt[也可以通过嵌套的形式][
-    套娃。
-    #p[
-      套娃。
-      #p[
-        套娃。
-        #p[
-          套娃。
-          #p[
-            套娃。
-            #p[
-              套娃。
-            ]
-          ]
-        ]
-      ]
-    ]
-  ]
-]
-
-#pagebreak()
-
-然后，你可以在下一页继续写作业。
-
-= 代码块
-
-```python
-def f(x):
-    return x**2
+```typ
+#import "template.typ": *
 ```
 
-实现了代码块的行号！
+在文档的开头设置参数：
+
+```typ
+#let title = "An Example Assignment"
+#let author = "hongjr03"
+#let course_id = "Typst 5.011"
+#let instructor = "John"
+#let semester = "2024 Spring"
+#let due_time = "May 11, 2024"
+#let id = "17113945"
+```
+
+然后使用 `assignment_class` 函数生成文档：
+
+```typ
+#show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id)
+```
+
+这样就创建了本文档的开头部分，以及后面每一页的页眉。
+
+在正文部分，你可以使用以下块来创建问题、特殊块、问题和解答块：
+
+#cprob[如何使用问题块来创建问题？][
+  你可以使用 `cprob` 块来创建问题。例如：
+
+  ```typ
+  #cprob[这是一个问题][
+    这是问题的内容。
+  ]
+  ```
+
+  会生成一个带编号的问题块，如本块所示。
+]
+
+#cprob[我有好多个问题，不想依次编号，怎么办？][
+  使用 `cprob` 块时会自动编号问题，同时在导出的 PDF 文档中会显示问题的索引。
+
+  cprob 的 c 代表 counter，即计数器。你可以使用 ```typ #problem_counter.update(0)``` 来重置计数器，使下一个问题从 1 开始编号。
+]
+
+```typ
+#problem_counter.update(0) // 重置问题计数器
+```
+
+#problem_counter.update(0) // 重置问题计数器
+
+#cprob[👈这就是效果。][
+  问题计数器已重置为 0，下一个问题将从 1 开始编号。
+]
+
+#prob[不想要编号？][
+  你可以使用 `prob` 块来创建无编号的问题。例如：
+
+  ```typ
+  #prob[这是一个无编号的问题][
+    这是问题的内容。
+  ]
+  ```
+
+  会生成一个无编号的问题块，如本块所示。
+]
+
+#prob[只想要问题，不需要内容？][
+  你可以使用 `prob` 块来创建无内容的问题。例如：
+
+  ```typ
+  #prob[这是一个无内容的问题][]
+  ```
+
+  会生成一个无内容的问题块，如下：
+
+  #prob[这是一个无内容的问题][]
+
+  或者，使用 `cprob` 块并留空内容：
+
+  ```typ
+  #cprob[这是一个无内容的问题][]
+  ```
+
+  会生成带编号的无内容问题块，如下：
+
+  #cprob[这是一个无内容的问题][]
+]
+
+#prob_block[
+  当然，你也可以使用 `prob_block` 块来创建问题块。例如：
+
+  ```typ
+  #prob_block[
+    这是一个问题块的内容。
+  ]
+  ```
+
+  会生成一个只有内容部分的问题块，如本块所示。
+]
+
+#speci_block[我想要一个特殊块，怎么办？][
+  你可以使用 `speci_block` 块来创建特殊块。例如：
+
+  ```typ
+  #speci_block[这是一个特殊块][
+    这是特殊块的内容。
+  ]
+  ```
+
+  会生成一个带标题的特殊块，如本块所示。
+]
+
+#cqa[我想要一个问题和解答的块，怎么办？][
+  你可以使用 `cqa` 块来创建问题和解答的块。例如：
+
+  ```typ
+  #cqa[这是一个问题和解答块][
+    这是问题和解答块的内容。
+  ]
+  ```
+
+  会生成一个带编号的问题和解答块，如本块所示。
+]
+
+#cqa[需要注意的是：][
+  问题和解答块的计数器和问题块的计数器是分开的，你可以使用 ```typ #prob-solution_counter.update(0)``` 来重置计数器，使下一个问题从 1 开始编号。
+]
+
+```typ
+#prob-solution_counter.update(0) // 重置问题和解答计数器
+```
+
+#prob-solution_counter.update(0) // 重置问题和解答计数器
+
+#cqa[👈这就是效果。][
+  问题和解答计数器已重置为 0，下一个问题将从 1 开始编号。
+]
+
+#linebreak()
+#line(length: 100%)
+
+The end.
