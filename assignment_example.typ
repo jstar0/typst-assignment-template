@@ -5,12 +5,14 @@
 #let title = "An Example Assignment"
 #let author = "hongjr03"
 #let course_id = "Typst 5.011"
-#let instructor = "John"
-#let semester = "2024 Spring"
+#let instructor = "老师"
+#let semester = "2024 夏"
 #let due_time = "May 11, 2024"
 #let id = "17113945"
+#let lang = "zh"
+#let region = "cn"
 
-#show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id)
+#show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id, lang, region)
 
 
 // ----------------正文----------------

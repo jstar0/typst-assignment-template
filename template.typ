@@ -78,8 +78,8 @@
 #let proj = [#math.op("proj")]
 #let argmin = [#math.arg] + [#math.min]
 
-#let assignment_class(size: 10.5pt, title, author, course_id, professor_name, semester, due_time, id, body) = {
-  set text(font: (font.main, font.cjk), size: size, lang: "zh", region: "cn")
+#let assignment_class(size: 10.5pt, title, author, course_id, professor_name, semester, due_time, id, lang, reg, body) = {
+  set text(font: (font.main, font.cjk), size: size, lang: lang, region: reg)
    
   set heading(numbering: numblex("一、", "1.", "(1)"))
 
@@ -147,7 +147,11 @@
   let left_text = [
     *#author* #id
   ]
-  let right_text = [*#professor_name*] + [，*#semester* ] + [| *截止时间：*#due_time]
+  let comma = ","
+  if lang == "zh" {
+    comma = "，"
+  }
+  let right_text = [*#professor_name*] + [#comma*#semester* ] + [| *截止时间：*#due_time]
    
   if due_time == none or due_time == "" {
     right_text = []
