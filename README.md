@@ -18,13 +18,7 @@
 
 + clone 本项目并在 `assignment_example.typ` 中进行编辑。
 
-默认使用的字体是 SF Pro Text、SF Mono 和 Noto Serif SC（思源宋体），如果在电脑上没有这些字体，你可以在 `template.typ` 的
-
-```typ
-#let font = (main: "SF Pro Text", mono: "SF Mono", cjk: "Noto Serif SC")
-```
-
-中修改字体。
+默认使用的字体和字体修改方式见使用示例和说明👇。
 
 ## 一个使用示例和说明
 
