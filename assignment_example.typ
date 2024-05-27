@@ -9,10 +9,8 @@
 #let semester = "2024 夏"
 #let due_time = "May 11, 2024"
 #let id = "17113945"
-#let lang = "zh"
-#let region = "cn"
 
-#show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id, lang, region)
+#show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id)
 
 
 // ----------------正文----------------

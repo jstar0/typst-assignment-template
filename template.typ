@@ -78,8 +78,8 @@
 #let proj = [#math.op("proj")]
 #let argmin = [#math.arg] + [#math.min]
 
-#let assignment_class(size: 10.5pt, title, author, course_id, professor_name, semester, due_time, id, lang, reg, body) = {
-  set text(font: (font.main, font.cjk), size: size, lang: lang, region: reg)
+#let assignment_class(size: 10.5pt, title, author, course_id, professor_name, semester, due_time, id, lang: "zh", region: "cn", body) = {
+  set text(font: (font.main, font.cjk), size: size, lang: lang, region: region)
    
   set heading(numbering: numblex("一、", "1.", "(1)"))
 
