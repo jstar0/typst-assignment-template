@@ -1,7 +1,6 @@
+#import "@preview/numblex:0.1.1": numblex, circle_numbers
 
-#import "@preview/numblex:0.1.0": numblex, circle_numbers
-
-#let font = (main: "SF Pro Text", mono: "SF Mono", cjk: "Noto Serif SC")
+#let font = (main: "IBM Plex Serif", mono: "IBM Plex Mono", cjk: "Noto Serif SC")
 
 #let problem_counter = counter("problem")
 #let prob-solution_counter = counter("prob-solution")
@@ -80,20 +79,38 @@
 #let argmin = [#math.arg] + [#math.min]
 
 #let assignment_class(size: 10.5pt, title, author, course_id, professor_name, semester, due_time, id, body) = {
-
   set text(font: (font.main, font.cjk), size: size, lang: "zh", region: "cn")
    
-  show heading.where(level: 1): it => [
+  set heading(numbering: numblex("一、", "1.", "(1)"))
+
+  show heading: it => [
     #it
-    #v(0.2em)
-  ] 
+    #v(0.3em)
+  ]
+  
+  // Very useful trick, special thanks to @AxiomOfChoices
+  // https://github.com/typst/typst/issues/2953#issuecomment-1858823455
+  show heading: current => locate(loc => 
+  {
+    let elms = query(selector(heading).before(loc), loc) // Finds all previous headings, inclusive
+    if elms.len() > 1 { // If there are at least 2
+      let previous_heading = elms.at(-2) // Take the previous one
+      if ( // If it is close enough to the current one
+        previous_heading.location().position().y + 35pt > current.location().position().y
+      ) {
+        return [#v(-0.3em) #current]
+      }
+    }
+    return current
+  }) 
    
-  set heading(numbering: numblex("一、", "1.", (numbering: "(1).", depth: 2), (numbering: circle_numbers, depth: 4)))
+   
+   
   set raw(tab-size: 4)
   show link: underline
    
   set list(indent: 6pt)
-  set enum(indent: 6pt)
+  set enum(indent: 6pt, numbering: "1.a.i.") // maybe use numblex here?
    
   set bibliography(title: [参考], style: "ieee")
    
@@ -112,29 +129,33 @@
     ]
   }))
    
-  line(length: 100%)
-  align(left, text(17pt)[
-    *#course_id* | *#title*
-  ])
+  // Title and Header
+   
+  let make_header(name, width: 453.5pt, max: 17pt, step: 0.1pt) = {
+    context {
+      if max == none { max = text.size }
+      let textsize = max
+      let size = measure(align(left, text(textsize)[#name]))
+      while size.width > width {
+        textsize = textsize - step
+        size = measure(align(left, text(textsize)[#name]))
+      }
+      return align(left, text(textsize)[#name])
+    }
+  }
    
   let left_text = [
     *#author* #id
   ]
-  let mid_text = [*#professor_name*] + [, *#semester* ]
-  let right_text = [| *截止时间：*#due_time]
+  let right_text = [*#professor_name*] + [，*#semester* ] + [| *截止时间：*#due_time]
    
   if due_time == none or due_time == "" {
     right_text = []
   }
    
-   
-  left_text
-  h(1fr)
-  mid_text
-  right_text
-   
-   
-   
+  line(length: 100%)
+  make_header[*#course_id* | *#title*]
+  left_text; h(1fr); right_text
   line(length: 100%)
    
   set raw(tab-size: 4)
@@ -159,5 +180,8 @@
     .enumerate()
     .map(((i, line)) => (style-number(i + 1), line))
     .flatten())]
+   
+   
+   
   body
 }
