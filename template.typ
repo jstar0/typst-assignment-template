@@ -110,7 +110,8 @@
   show link: underline
    
   set list(indent: 6pt)
-  set enum(indent: 6pt, numbering: "1.a.i.") // maybe use numblex here?
+  set enum(indent: 6pt)
+  set enum(numbering: numblex(numberings: ("1.", "a)", circle_numbers)), full: true)
    
   set bibliography(title: [参考], style: "ieee")
    
