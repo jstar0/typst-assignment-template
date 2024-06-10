@@ -1,5 +1,5 @@
 #import "template.typ": *
-#import "@preview/numblex:0.1.1": numblex, circle_numbers
+
 
 // ----------------参数----------------
 #let title = "An Example Assignment"
@@ -19,6 +19,7 @@
 #quote(block: true, attribution: [#lorem(1)])[
   你说得对，但《Typst》是一款 #lorem(10)，后面忘了。
 ]
+~#v(-2em)
 
 要开始使用此模板，你需要
 

@@ -1,4 +1,5 @@
 #import "@preview/numblex:0.1.1": numblex, circle_numbers
+#import "@preview/indenta:0.0.3": fix-indent
 
 #let font = (main: "IBM Plex Serif", mono: "IBM Plex Mono", cjk: "Noto Serif SC")
 
@@ -22,8 +23,9 @@
     #set heading(numbering: none)
      
     #set text(fill: white)
-     
+    #v(0.3em)
     ==== #title
+    #v(-0.3em)
   ]
   v(-12pt)
   block(fill: rgb("#fcfdff"), width: 100%, inset: 8pt, radius: (top: 0pt, bottom: 4pt), stroke: rgb("#1f84c7"))[
@@ -79,15 +81,25 @@
 #let argmin = [#math.arg] + [#math.min]
 
 #let assignment_class(size: 10.5pt, title, author, course_id, professor_name, semester, due_time, id, lang: "zh", region: "cn", body) = {
+
   set text(font: (font.main, font.cjk), size: size, lang: lang, region: region)
    
   set heading(numbering: numblex("一、", "1.", "(1)"))
-
+   
+  show heading.where(level: 1): it => {
+    if (it.numbering != none) {
+      block(counter(heading.where(level: 1)).display("一") + "、" + it.body)
+    } else {
+      it
+    }
+  }
+   
+   
   show heading: it => [
     #it
     #v(0.3em)
   ]
-  
+   
   // Very useful trick, special thanks to @AxiomOfChoices
   // https://github.com/typst/typst/issues/2953#issuecomment-1858823455
   show heading: current => locate(loc => 
@@ -107,7 +119,10 @@
    
    
   set raw(tab-size: 4)
-  show link: underline
+  show link: it => {
+    set text(fill: blue)
+    underline(it)
+  }
    
   set list(indent: 6pt)
   set enum(indent: 6pt)
@@ -155,7 +170,7 @@
   let right_text = [*#professor_name*] + [#comma*#semester* ] + [| *截止时间：*#due_time]
    
   if due_time == none or due_time == "" {
-    right_text = []
+    right_text = [*#professor_name*] + [#comma*#semester* ]
   }
    
   line(length: 100%)
@@ -169,6 +184,13 @@
   // Display inline code in a small box
   // that retains the correct baseline.
   show raw.where(block: false): box.with(fill: luma(240), inset: (x: 3pt, y: 0pt), outset: (y: 3pt), radius: 2pt)
+
+  let cjk-markers = regex("[“”‘’．，。、？！：；（）｛｝［］〔〕〖〗《》〈〉「」【】『』─—＿·…\u{30FC}]+")
+  show cjk-markers: set text(font: font.cjk)
+  show raw: it => {
+    show cjk-markers: set text(font: font.cjk)
+    it
+  }
    
   // Display block code in a larger block
   // with more padding.
@@ -185,7 +207,10 @@
     .enumerate()
     .map(((i, line)) => (style-number(i + 1), line))
     .flatten())]
-   
+  
+
+  set par(first-line-indent: 2em)
+  show: fix-indent()
    
    
   body
