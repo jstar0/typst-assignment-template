@@ -1,17 +1,16 @@
-#import "template.typ": *
+#import "./libs/template.typ": *
 
 
 // ----------------参数----------------
 #let title = "An Example Assignment"
-#let author = "hongjr03"
-#let course_id = "Typst 5.011"
+#let author = "JStar0"
+#let lesson_id = "实验某某"
 #let instructor = "老师"
 #let semester = "2024 夏"
-#let due_time = "May 11, 2024"
-#let id = "17113945"
+#let course_name = "信息系统开发 (.NET)"
+#let id = "23000000000"
 
-#show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id)
-
+#show: assignment_class.with(title, author, lesson_id, instructor, semester, course_name, id)
 
 // ----------------正文----------------
 
@@ -62,17 +61,17 @@
 ```typ
 #let title = "An Example Assignment"
 #let author = "hongjr03"
-#let course_id = "Typst 5.011"
+#let lesson_id = "Typst 5.011"
 #let instructor = "John"
 #let semester = "2024 Spring"
-#let due_time = "May 11, 2024"
+#let course_name = "May 11, 2024"
 #let id = "17113945"
 ```
 
 然后使用 `assignment_class` 函数生成文档：
 
 ```typ
-#show: assignment_class.with(title, author, course_id, instructor, semester, due_time, id)
+#show: assignment_class.with(title, author, lesson_id, instructor, semester, course_name, id)
 ```
 
 这样就创建了本文档的开头部分，以及后面每一页的页眉。
