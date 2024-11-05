@@ -253,20 +253,22 @@
     },
   )
 
-  let make_header(name, width: 453.5pt, max: 17pt, step: 0.1pt) = {
+  let make_header(name, step: 0.1pt) = (
     context {
-      if max == none {
-        max = text.size
-      }
-      let textsize = max
-      let size = measure(align(left, text(textsize)[#name]))
-      while size.width > width {
+      let height = measure(heading(depth: 1, "")).height / 0.6
+      let textsize = measure(heading(depth: 1, "")).height / 0.6
+      let size = measure(block(text(textsize)[#name]))
+      while size.height > height {
         textsize = textsize - step
-        size = measure(align(left, text(textsize)[#name]))
+        size = measure(block(text(textsize)[#name]))
       }
-      return align(left, text(textsize)[#name])
+      return {
+        block(text(textsize)[#name])
+        v(0.2em)
+      }
     }
-  }
+  )
+
 
 
   let comma = if lang == "zh" {
