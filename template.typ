@@ -3,15 +3,16 @@
 #let default_font = (
   main: "IBM Plex Sans",
   mono: "IBM Plex Mono",
-  cjk: "Noto Serif SC",
+  cjk: "Noto Serif CJK SC",
   math: "IBM Plex Math",
-  math-cjk: "Noto Serif SC",
+  math-cjk: "Noto Serif CJK SC",
 )
 
 #let problem_counter = counter("problem")
 #let prob-solution_counter = counter("prob-solution")
 
-/// 创建一个块。由于这个块的样式只有问题使用，所以叫它 `prob_block`。
+/// 创建一个块。
+/// 由于这个块的样式只有问题使用，所以叫它 `prob_block`。
 /// #example(`prob_block[这是一个块。]`, scale-preview: 100%)
 /// - body (content): 块的内容。
 /// -> content
@@ -132,7 +133,7 @@
 /// - size (length): 字体大小。默认为 `10.5pt`。
 /// - title (string): 文档的标题。
 /// - author (string): 作者。
-/// - course_id (string): 课程名。
+/// - course (string): 课程名。
 /// - professor_name (string): 教师名。
 /// - semester (string): 学期。
 /// - due_time (datetime): 截止时间。
@@ -144,48 +145,88 @@
 /// -> content
 #let assignment_class(
   size: 10.5pt,
-  title,
-  author,
-  course_id,
-  professor_name,
-  semester,
-  due_time,
-  id,
+  title: none,
+  author: none,
+  course: none,
+  professor_name: none,
+  semester: none,
+  due_time: none,
+  id: none,
   font: default_font,
   lang: "zh",
   region: "cn",
   body,
 ) = {
 
+  /// 设置字体。
   set text(font: (font.main, font.cjk), size: size, lang: lang, region: region)
+  let cjk-markers = regex("[“”‘’．，。、？！：；（）｛｝［］〔〕〖〗《》〈〉「」【】『』─—＿·…\u{30FC}]+")
+  show cjk-markers: set text(font: font.cjk)
+  show raw: it => {
+    show cjk-markers: set text(font: font.cjk)
+    it
+  }
+  show math.equation: it => {
+    set text(font: font.math)
+    show regex("\p{script=Han}"): set text(font: font.math-cjk)
+    show cjk-markers: set text(font: font.math-cjk)
+    it
+  }
 
+  /// 设置标题样式。
   show heading: it => {
     show h.where(amount: 0.3em): none
     it
   }
-
   show heading: set block(spacing: 1.2em)
+  set heading(
+    numbering: numbly(
+      "{1:一}、",
+      "{2:1}. ",
+      "{2:1}.{3}. ",
+    ),
+  )
 
-
-
+  /// 设置代码块样式。
   set raw(tab-size: 4)
+  show raw: set text(font: (font.mono, font.cjk))
+  show raw.where(block: false): box.with(fill: luma(240), inset: (x: 3pt, y: 0pt), outset: (y: 3pt), radius: 2pt)
+  // https://github.com/typst/typst/issues/344#issuecomment-2041231063
+  let style-number(number) = text(gray)[#number]
+  show raw.where(block: true): it => block(
+    fill: luma(240),
+    inset: 10pt,
+    radius: 4pt,
+    width: 100%,
+  )[
+    #set par(justify: false)
+    #grid(columns: (auto, 1fr), align: (
+        right,
+        left,
+      ), column-gutter: 0.7em, row-gutter: 0.6em, ..it.lines.enumerate().map(((i, line)) => (
+        style-number(i + 1),
+        line,
+      )).flatten())]
+
+  /// 设置链接样式。
   show link: it => {
     set text(fill: blue)
     underline(it)
   }
 
+  /// 设置列表样式。
   set list(indent: 6pt)
   set enum(indent: 6pt)
-  // set enum(numbering: numblex(numberings: ("1.", "a)", circle_numbers)), full: true)
   set enum(
     numbering: numbly(
-      "{1:1}.", // use {level:format} to specify the format
-      "{2:1})", // if format is not specified, arabic numbers will be used
-      "{3:a}.", // here, we only want the 3rd level
+      "{1:1}.",
+      "{2:1})",
+      "{3:a}.",
     ),
     full: true,
   )
 
+  /// 设置引用样式。
   set bibliography(title: [参考], style: "ieee")
 
   set document(title: title, author: author)
@@ -196,7 +237,7 @@
         none
       } else {
         [
-          #course_id
+          #course
           #h(1fr)
           #author | #title
         ]
@@ -211,8 +252,6 @@
       ]
     },
   )
-
-  // Title and Header
 
   let make_header(name, width: 453.5pt, max: 17pt, step: 0.1pt) = {
     context {
@@ -229,66 +268,24 @@
     }
   }
 
-  let left_text = [
-    #author #id
-  ]
-  let comma = ","
-  if lang == "zh" {
-    comma = "，"
-  }
-  let right_text = [#professor_name] + comma + [#semester] + [ | *截止时间：*#due_time.display("[year]年[month padding:none]月[day padding:none]日")]
 
-  if due_time == none or due_time == "" {
-    right_text = [*#professor_name*] + [#comma*#semester* ]
+  let comma = if lang == "zh" {
+    "，"
+  } else {
+    ","
   }
+
+  let info_display = if due_time == none or due_time == "" {
+    [#author #id] + h(1fr) + [#professor_name] + comma + [#semester]
+  } else {
+    [#author #id] + h(1fr) + [#professor_name] + comma + [#semester] + [ | #due_time.display("[year]年[month padding:none]月[day padding:none]日")]
+  }
+
 
   line(length: 100%)
-  make_header[*#course_id* | *#title*]
-  left_text
-  h(1fr)
-  right_text
+  make_header[*#course* | *#title*]
+  info_display
   line(length: 100%)
-
-  set raw(tab-size: 4)
-
-  show raw: set text(font: (font.mono, font.cjk))
-  // Display inline code in a small box
-  // that retains the correct baseline.
-  show raw.where(block: false): box.with(fill: luma(240), inset: (x: 3pt, y: 0pt), outset: (y: 3pt), radius: 2pt)
-
-  let cjk-markers = regex("[“”‘’．，。、？！：；（）｛｝［］〔〕〖〗《》〈〉「」【】『』─—＿·…\u{30FC}]+")
-  show cjk-markers: set text(font: font.cjk)
-  show raw: it => {
-    show cjk-markers: set text(font: font.cjk)
-    it
-  }
-  show math.equation: it => {
-    set text(font: font.math)
-    show regex("\p{script=Han}"): set text(font: font.math-cjk)
-    show cjk-markers: set text(font: font.math-cjk)
-    it
-  }
-
-  // Display block code in a larger block
-  // with more padding.
-  // and with line numbers.
-  // Thank you @Andrew15-5 for the idea and the code!
-  // https://github.com/typst/typst/issues/344#issuecomment-2041231063
-  let style-number(number) = text(gray)[#number]
-  show raw.where(block: true): it => block(
-    fill: luma(240),
-    inset: 10pt,
-    radius: 4pt,
-    width: 100%,
-  )[#grid(columns: (auto, 1fr), align: (
-        right,
-        left,
-      ), column-gutter: 0.7em, row-gutter: 0.6em, ..it.lines.enumerate().map(((i, line)) => (
-        style-number(i + 1),
-        line,
-      )).flatten())]
-
-
 
   body
 }

@@ -1,60 +1,43 @@
 #import "template.typ": *
 
 // ----------------参数----------------
-#let font = (
-  main: "IBM Plex Sans",
-  mono: "IBM Plex Mono",
-  cjk: "Noto Serif SC",
-  math: "IBM Plex Math",
-  math-cjk: "Noto Serif SC",
-)
-
-#let title = "An Example Assignment"
-#let author = "张三"
-#let course_id = "Typst 5.011"
-#let instructor = "老师"
-#let semester = "2024 夏"
-#let due_time = datetime(day: 11, month: 5, year: 2024)
-#let id = "17113945"
-
-#show: assignment_class.with(font: font, title, author, course_id, instructor, semester, due_time, id)
-
-#set heading(
-  numbering: numbly(
-    "{1:一}、",
-    "{2:1}. ",
-    "{2:1}.{3}. ",
-  ),
+#show: assignment_class.with(
+  title: "An Example Assignment",
+  author: "张三",
+  course: "Typst 5.011",
+  professor_name: "老师",
+  semester: "2024 夏",
+  due_time: datetime(day: 11, month: 5, year: 2024),
+  id: "17113945",
 )
 
 // ----------------正文----------------
-
-= 开始
+= 快速开始
 
 要开始使用此模板，你需要
 
 + 安装必须的字体包，包括：
 
-  - #link("https://github.com/IBM/plex")[*IBM Plex*]
-  - #link("https://github.com/notofonts/noto-cjk")[*Noto Serif SC*]
-
-  或者，你可以在文档开头的 `font` 参数修改字体设置：
-
-  + 在终端 / 命令行输入 ```typ typst fonts``` 查看当前可用的字体；
-  + 在正文开头使用 ```typ #let font = (
-  main: "IBM Plex Sans",
-  mono: "IBM Plex Mono",
-  cjk: "Noto Serif SC",
-  math: "IBM Plex Math",
-  math-cjk: "Noto Serif SC",
-)
-     ``` 修改字体，其中 `main` 为主要字体，`mono` 为等宽字体，`cjk` 为中文字体。然后在 `assignment_class` 函数中使用 `font: font` 来设置字体。
+  - #link("https://github.com/IBM/plex")[*IBM Plex Sans, Mono, Math*]
+  - #link("https://github.com/notofonts/noto-cjk")[*Noto Serif CJK SC*]
 
 + 下载 `template.typ` 并在你的文档开头中使用 ```typ
    #import "template.typ": *
-   ``` 来导入模板。
+   ``` 来导入模板；
 
-+ clone 本项目并在 `assignment_example.typ` 中进行修改。
++ 在文档开头设置参数，包括标题、作者、课程名、教师名、学期、截止时间和学号；
+  ```typ
+  #show: assignment_class.with(
+    title: "An Example Assignment", // 标题
+    author: "张三", // 作者
+    course: "Typst 5.011", // 课程名
+    professor_name: "老师", // 教师名
+    semester: "2024 夏", // 学期
+    due_time: datetime(day: 11, month: 5, year: 2024), // 截止时间
+    id: "17113945", // 学号
+  )
+  ```
++ 开始写作！
 
 = 特性
 
@@ -62,10 +45,10 @@
 
 + 自动编号的问题块
 + 自定义标题的特殊块
-+ 引入 `numbley` 包，支持中文样式的标题编号
++ 引入 `numbly` 包，支持中文样式的标题编号
 + 美观整洁的排版
 
-= 使用
+= 使用<使用>
 
 == 导入和配置
 
@@ -78,50 +61,17 @@
 在文档的开头设置参数：
 
 ```typ
-#let title = "An Example Assignment"
-#let author = "hongjr03"
-#let course_id = "Typst 5.011"
-#let instructor = "John"
-#let semester = "2024 Spring"
-#let due_time = datetime(day: 11, month: 5, year: 2024)
-#let id = "17113945"
-```
-
-以及使用的字体：
-
-```typ
-#let font = (
-  main: "IBM Plex Sans",
-  mono: "IBM Plex Mono",
-  cjk: "Noto Serif SC",
-  math: "IBM Plex Math",
-  math-cjk: "Noto Serif SC",
+#show: assignment_class.with(
+  title: "An Example Assignment",
+  author: "张三",
+  course: "Typst 5.011",
+  professor_name: "老师",
+  semester: "2024 夏",
+  due_time: datetime(day: 11, month: 5, year: 2024),
+  id: "17113945",
 )
 ```
-
-接着使用 `numbly` 包设置标题编号样式：
-
-```typ
-#set heading(
-  numbering: numbly(
-    "{1:一}、",
-    "{2:1}. ",
-    "{2:1}.{3}. ",
-  ),
-)
-```
-
-参数中，`{*:1}` 的 `*` 代表标题的级别，`1` 代表标题的格式。`{1:一}、` 代表一级标题的格式为 `一、`，`{2:1}. ` 代表二级标题的格式为 `1. `，`{2:1}.{3}. ` 代表三级标题的格式为 `1.1. `。
-
-*注意*，本模板默认去除了标题 numbering 后的空格，所以在设置标题编号时请注意空格的使用。如 `"{2:1}. "` 的末尾有一个空格，这样在标题编号后会有一个空格。
-
-然后使用 `assignment_class` 函数生成文档：
-
-```typ
-#show: assignment_class.with(font: font, title, author, course_id, instructor, semester, due_time, id)
-```
-
-这样就创建了本文档的开头部分，以及后面每一页的页眉。
+接下来即可开始写作。
 
 == 正文
 
@@ -191,7 +141,46 @@
 
 == 自定义
 
-你可以在 `template.typ` 中自定义 `prob`、`cprob`、`cqa`、`prob_block`、`speci_block` 函数，以满足你的需求。
+=== 更多自定义
+
+如果你需要更多的自定义，你可以在 `template.typ` 中自定义 `prob`、`cprob`、`cqa`、`prob_block`、`speci_block` 函数，以满足你的需求。
+
+=== 标题编号
+
+可以在文档设置参数后使用 `numbly` 包设置标题编号样式：
+
+```typ
+#set heading(
+  numbering: numbly(
+    "{1:一}、",
+    "{2:1}. ",
+    "{2:1}.{3}. ",
+  ),
+)
+```
+
+参数中，`{*:1}` 的 `*` 代表标题的级别，`1` 代表标题的格式。`{1:一}、` 代表一级标题的格式为 `一、`，`{2:1}. ` 代表二级标题的格式为 `1. `，`{2:1}.{3}. ` 代表三级标题的格式为 `1.1. `。
+
+*注意*，本模板默认去除了标题 numbering 后的空格，所以在设置标题编号时请注意空格的使用。如 `"{2:1}. "` 的末尾有一个空格，这样在标题编号后会有一个空格。
+
+=== 字体
+
+先在终端 / 命令行输入 ```bash typst fonts``` 查看当前可用的字体，以在文档开头加入 `font` 参数修改字体设置以及使用的字体：
+
+```typ
+#let font = (
+  main: "IBM Plex Sans",
+  mono: "IBM Plex Mono",
+  cjk: "Noto Serif SC",
+  math: "IBM Plex Math",
+  math-cjk: "Noto Serif SC",
+)
+
+#show: assignment_class.with(
+  // ... 保持原有的参数
+  font: font,
+)
+```
 
 = 参数说明
 
@@ -217,6 +206,6 @@
     first-heading-level: 1,
     show-module-name: true,
     show-outline: false,
-    local-names: (parameters: [变量], default: [默认值]),
+    local-names: (parameters: "参数", default: "默认值"),
   )
 }
