@@ -1,8 +1,8 @@
 #import "@preview/numbly:0.1.0": numbly
 
 #let default_font = (
-  main: "IBM Plex Sans",
-  mono: "IBM Plex Mono",
+  main: "Times New Roman",
+  mono: "JetBrainsMono NF",
   cjk: "Noto Serif CJK SC",
   math: "IBM Plex Math",
   math-cjk: "Noto Serif CJK SC",
@@ -131,10 +131,11 @@
 
 /// 模板的核心类，规范了文档的格式。
 /// - size (length): 字体大小。默认为 `10.5pt`。
-/// - title (string): 文档的标题。
+/// - title (string): 主标题（曾命名为course）
+/// - subtitle (string): 文档的子标题。（曾命名为title）
 /// - author (string): 作者。
-/// - course (string): 课程名。
 /// - professor_name (string): 教师名。
+/// - course (string): 课程名。
 /// - semester (string): 学期。
 /// - due_time (datetime): 截止时间。
 /// - id (string): 学号。
@@ -146,9 +147,10 @@
 #let assignment_class(
   size: 10.5pt,
   title: none,
+  subtitle: none,
   author: none,
-  course: none,
   professor_name: none,
+  course: none,
   semester: none,
   due_time: none,
   id: none,
@@ -229,7 +231,7 @@
   /// 设置引用样式。
   set bibliography(title: [参考], style: "ieee")
 
-  set document(title: title, author: author)
+  set document(title: subtitle, author: author)
   set page(
     paper: "a4",
     header: context {
@@ -237,9 +239,9 @@
         none
       } else {
         [
-          #course
+          #title
           #h(1fr)
-          #author | #title
+          #author | #subtitle
         ]
       }
     },
@@ -279,14 +281,14 @@
   }
 
   let info_display = if due_time == none or due_time == "" {
-    [#author #id] + h(1fr) + [#professor_name] + comma + [#semester]
+    [#author ~#id] + h(1fr) + [#professor_name] + comma + [#course] + comma + [#semester]
   } else {
-    [#author #id] + h(1fr) + [#professor_name] + comma + [#semester] + [ | #due_time.display("[year]年[month padding:none]月[day padding:none]日")]
+    [#author ~#id] + h(1fr) + [#professor_name] + comma + [#course] + comma + [#semester] + [ | #due_time.display("[year]年[month padding:none]月[day padding:none]日")]
   }
 
 
   line(length: 100%)
-  make_header[*#course* | *#title*]
+  make_header[*#title* | *#subtitle*]
   info_display
   line(length: 100%)
 

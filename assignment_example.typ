@@ -2,21 +2,34 @@
 
 // ----------------参数----------------
 #show: assignment_class.with(
-  title: "An Example Assignment",
+  title: "实验一",
+  subtitle: "一个作为Example的实验",
   author: "张三",
-  course: "Typst 5.011",
   professor_name: "老师",
+  course: "Typst 5.011",
   semester: "2024 夏",
   due_time: datetime(day: 11, month: 5, year: 2024),
-  id: "17113945",
+  id: "23000000000",
 )
 
 // ----------------正文----------------
+= 提示
+
+基于 #link("https://github.com/hongjr03/typst-assignment-template")[hongjr03] 学长的实验报告进行微调，主要更改了样式以供自用。感谢学长的精心制作。
+
 = 快速开始
 
 要开始使用此模板，你需要
 
 + 安装必须的字体包，包括：
+
+  经过个人修改，更改了字体设定：
+  - Times New Roman
+  - JetBrainsMono NF
+  - Noto Serif CJK SC
+  - IBM Plex Math
+
+  原模板的要求如下：
 
   - #link("https://github.com/IBM/plex")[*IBM Plex Sans, Mono, Math*]
   - #link("https://github.com/notofonts/noto-cjk")[*Noto Serif CJK SC*]
@@ -28,7 +41,7 @@
 + 在文档开头设置参数，包括标题、作者、课程名、教师名、学期、截止时间和学号；
   ```typ
   #show: assignment_class.with(
-    title: "An Example Assignment", // 标题
+    subtitle: "An Example Assignment", // 标题
     author: "张三", // 作者
     course: "Typst 5.011", // 课程名
     professor_name: "老师", // 教师名
@@ -62,7 +75,7 @@
 
 ```typ
 #show: assignment_class.with(
-  title: "An Example Assignment",
+  subtitle: "An Example Assignment",
   author: "张三",
   course: "Typst 5.011",
   professor_name: "老师",
