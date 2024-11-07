@@ -239,9 +239,9 @@
         none
       } else {
         [
-          #title
+          #title | #subtitle
           #h(1fr)
-          #author | #subtitle
+          #author | #id
         ]
       }
     },
@@ -253,7 +253,7 @@
         #page_number / #total_pages
       ]
     },
-    background: image("Front-Page.svg", width: 100%, height: 100%)
+    background: image("background.svg", width: 100%, height: 100%)
   )
 
   let make_header(name, step: 0.1pt) = (

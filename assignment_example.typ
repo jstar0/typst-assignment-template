@@ -6,16 +6,18 @@
   subtitle: "一个作为Example的实验",
   author: "张三",
   professor_name: "老师",
-  course: "Typst 5.011",
+  course: "比较高端的课程",
   semester: "2024 夏",
   due_time: datetime(day: 11, month: 5, year: 2024),
   id: "23000000000",
 )
 
 // ----------------正文----------------
-= 提示
+= 二改介绍
 
-基于 #link("https://github.com/hongjr03/typst-assignment-template")[hongjr03] 学长的实验报告进行微调，主要更改了样式以供自用。感谢学长的精心制作。
+基于 #link("https://github.com/hongjr03/typst-assignment-template")[hongjr03] 学长的实验报告进行微调，主要更改了样式以供自用。
+
+感谢学长的精心制作和无私分享。
 
 = 快速开始
 
