@@ -2,66 +2,70 @@
 
 // ----------------参数----------------
 #show: assignment_class.with(
-  title: "实验一",
-  subtitle: "一个作为Example的实验",
+  title: "2024年11月7日",
+  subtitle: "DATALAB",
   author: "张三",
-  professor_name: "老师",
-  course: "比较高端的课程",
+  professor_name: "蔡青",
+  course: "计算机系统基础",
   semester: "2024 夏",
   due_time: datetime(day: 11, month: 5, year: 2024),
   id: "23000000000",
 )
 
 // ----------------正文----------------
-= 二改介绍
+= 实验目的
 
-基于 #link("https://github.com/hongjr03/typst-assignment-template")[hongjr03] 学长的实验报告进行微调，主要更改了样式以供自用。
+熟悉和掌握计算机中整数和浮点数的二进制编码表示。
 
-感谢学长的精心制作和无私分享。
+= 实验要求
 
-= 快速开始
++ *整数：*
 
-要开始使用此模板，你需要
+  - 只能使用0-255的整型常数
+  - 只能使用函数参数与函数内声明的局部变量
+  - 只能使用如下单目操作符：! ~
+  - 只能使用如下双目操作符：& ^ | + << >>
+  - 最多只能使用有限个运算符（等于号、括号不计），可以认为使用的运算符个数越少得分越高
+  - 一些函数可能对操作符有更多的限制（在题目前以操作符限制给出）
+  - 禁止使用任何控制结构如 if do while for switch等
+  - 禁止定义或使用任何宏
+  - 禁止定义任何函数
+  - 禁止调用任何函数（除了可以使用 printf 输出中间变量，但提交时必须去掉）
+  - 禁止使用任何形式的类型转换
+  - 禁止使用 int 以外的任何类型（包括结构体、数组、联合体）
 
-+ 安装必须的字体包，包括：
++ *浮点数：*
 
-  经过个人修改，更改了字体设定：
-  - Times New Roman
-  - JetBrainsMono NF
-  - Noto Serif CJK SC
-  - IBM Plex Math
+  - 只能使用函数参数与函数内声明的局部变量
+  - 最多只能使用有限个运算符（等于号、括号不计），可以认为使用的运算符个数越少得分越高
+  - 禁止定义或使用任何宏
+  - 禁止定义任何函数
+  - 禁止调用任何函数（除了可以使用 printf 输出中间变量，但提交时必须去掉）
+  - 禁止使用任何形式的类型转换
+  - 禁止使用 int、unsigned 以外的任何类型（包括结构体、数组、联合体）
+  - 禁止定义或使用任何浮点常量
 
-  原模板的要求如下：
+= 实验内容
 
-  - #link("https://github.com/IBM/plex")[*IBM Plex Sans, Mono, Math*]
-  - #link("https://github.com/notofonts/noto-cjk")[*Noto Serif CJK SC*]
+#make_subtitle("第1关：bitAnd")
 
-+ 下载 `template.typ` 并在你的文档开头中使用 ```typ
-   #import "template.typ": *
-   ``` 来导入模板；
+== 任务要求：
 
-+ 在文档开头设置参数，包括标题、作者、课程名、教师名、学期、截止时间和学号；
-  ```typ
-  #show: assignment_class.with(
-    subtitle: "An Example Assignment", // 标题
-    author: "张三", // 作者
-    course: "Typst 5.011", // 课程名
-    professor_name: "老师", // 教师名
-    semester: "2024 夏", // 学期
-    due_time: datetime(day: 11, month: 5, year: 2024), // 截止时间
-    id: "17113945", // 学号
-  )
-  ```
-+ 开始写作！
+补充函数`bitAnd()`，只用`~`、`|`实现`x&y`，将结果`return`返回。
 
-= 特性
++ 操作符限制：`~`、`|`
++ 操作符使用数量限制：8
 
-本模板基于 #link("https://github.com/gRox167/typst-assignment-template")[gRox167 的 typst-assignment-template] 修改，缝合了许多作者喜欢的特性，包括：
+== 实验代码及结果截图：
 
-+ 自动编号的问题块
-+ 自定义标题的特殊块
-+ 引入 `numbly` 包，支持中文样式的标题编号
-+ 美观整洁的排版
+
+== 代码思路：
+
+
+
+= 实验心得
+
+
 
 = 使用<使用>
 
