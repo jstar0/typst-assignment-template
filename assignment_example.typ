@@ -1,4 +1,4 @@
-#import "template.typ": *
+#import "./libs/template.typ": *
 
 // ----------------参数----------------
 #show: assignment_class.with(
@@ -192,10 +192,10 @@
   set heading(numbering: none)
 
   import "@preview/tidy:0.3.0"
-  import "template.typ"
+  import "./libs/template.typ"
 
   let docs = tidy.parse-module(
-    read("template.typ"),
+    read("./libs/template.typ"),
     scope: (
       template: template,
     ),
