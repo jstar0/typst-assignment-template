@@ -123,6 +123,23 @@
   }
 }
 
+#let make_subtitle(name, step: 0.1pt) = (
+  context {
+    let height = measure(heading(depth: 1, "")).height / 0.8
+    let textsize = measure(heading(depth: 1, "")).height / 0.8
+    let size = measure(block(text(textsize)[#name]))
+    while size.height > height {
+      textsize = textsize - step
+      size = measure(block(text(textsize)[#name]))
+    }
+    return {
+      set align(center);
+      block(text(textsize)[*#name*])
+      v(0.2em)
+    }
+  }
+)
+
 
 #let prox = [#math.op("prox")]
 #let proj = [#math.op("proj")]
@@ -266,6 +283,7 @@
         size = measure(block(text(textsize)[#name]))
       }
       return {
+        set align(center);
         block(text(textsize)[#name])
         v(0.2em)
       }
@@ -280,17 +298,22 @@
     ","
   }
 
-  let info_display = if due_time == none or due_time == "" {
-    [#author ~#id] + h(1fr) + [#professor_name] + comma + [#course] + comma + [#semester]
-  } else {
-    [#author ~#id] + h(1fr) + [#professor_name] + comma + [#course] + comma + [#semester] + [ | #due_time.display("[year]年[month padding:none]月[day padding:none]日")]
+  let info_display =  {
+    table(
+      columns: (auto, auto, auto, auto, auto, auto),
+      inset: 8pt,
+      align: horizon,
+      "姓名：", author, "学号：", id, "专业：", "计算机科学与技术",
+      "科目：", course, "题目：", subtitle, "实验时间：", title,
+      "实验成绩：", none, "实验教师：", professor_name
+    )
   }
 
-
-  line(length: 100%)
-  make_header[*#title* | *#subtitle*]
+  //line(length: 100%)
+  make_header[*中国海洋大学 ~计算机科学与技术学院*]
+  make_header[*实验报告*]
   info_display
-  line(length: 100%)
+  //line(length: 100%)
 
   body
 }
