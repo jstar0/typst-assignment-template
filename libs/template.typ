@@ -1,4 +1,5 @@
 #import "@preview/numbly:0.1.0": numbly
+#import "@preview/tablex:0.0.9": tablex, colspanx, rowspanx
 
 #let default_font = (
   main: "Times New Roman",
@@ -132,12 +133,11 @@
 /// 模板的核心类，规范了文档的格式。
 /// - size (length): 字体大小。默认为 `10.5pt`。
 /// - title (string): 主标题（曾命名为course）
-/// - subtitle (string): 文档的子标题。（曾命名为title）
 /// - author (string): 作者。
 /// - professor_name (string): 教师名。
 /// - course (string): 课程名。
 /// - semester (string): 学期。
-/// - due_time (datetime): 截止时间。
+/// - fin_time (datetime): 截止时间。
 /// - id (string): 学号。
 /// - font (object): 字体。默认为 `default_font`。如果你想使用不同的字体，可以传入一个字典，包含 `main`、`mono`、`cjk`、`math` 和 `math-cjk` 字段。
 /// - lang (string): 语言。默认为 `zh`。
@@ -147,12 +147,13 @@
 #let assignment_class(
   size: 10.5pt,
   title: none,
-  subtitle: none,
   author: none,
   professor_name: none,
   course: none,
   semester: none,
-  due_time: none,
+  fin_time: none,
+  class_time: none,
+  class: none,
   id: none,
   font: default_font,
   lang: "zh",
@@ -231,7 +232,7 @@
   /// 设置引用样式。
   set bibliography(title: [参考], style: "ieee")
 
-  set document(title: subtitle, author: author)
+  set document(title: title, author: author)
   set page(
     paper: "a4",
     header: context {
@@ -239,7 +240,7 @@
         none
       } else {
         [
-          #title | #subtitle
+          #title
           #h(1fr)
           #author | #id
         ]
@@ -266,7 +267,9 @@
         size = measure(block(text(textsize)[#name]))
       }
       return {
-        block(text(textsize)[#name])
+        align(center)[
+          #block(text(textsize)[*实 #h(3%) 验 #h(3%) 报 #h(3%) 告*])
+        ]
         v(0.2em)
       }
     }
@@ -280,17 +283,32 @@
     ","
   }
 
-  let info_display = if due_time == none or due_time == "" {
+  let info_display = if fin_time == none or fin_time == "" {
     [#author ~#id] + h(1fr) + [#professor_name] + comma + [#course] + comma + [#semester]
   } else {
-    [#author ~#id] + h(1fr) + [#professor_name] + comma + [#course] + comma + [#semester] + [ | #due_time.display("[year]年[month padding:none]月[day padding:none]日")]
+    [#author ~#id] + h(1fr) + [#professor_name] + comma + [#course] + comma + [#semester] + [ | #fin_time.display("[year]年[month padding:none]月[day padding:none]日")]
   }
 
 
-  line(length: 100%)
-  make_header[*#title* | *#subtitle*]
-  info_display
-  line(length: 100%)
+  //line(length: 100%)
+  make_header[]
+  //info_display
+  //line(length: 100%)
 
-  body
+  tablex(
+    columns: (auto, 1fr, auto, 1fr, auto, auto),
+    rows: 4,
+    auto-vlines: true,
+    align: center,
+
+    [#align(center)[学 号]], [*#id*], [姓名], [*#author*], [专业班级], [*#class*],
+    [课程名称], colspanx(3)[*#course*], [学期], [*#semester*],
+    [任课教师], [*#professor_name*], [完成日期], [*#fin_time.display("[year]/[month padding:none]/[day padding:none]")*], [上机课时间], [*#class_time.display("[year]/[month padding:none]/[day padding:none]")*],
+    colspanx(2)[实验名称], colspanx(4)[*#title*]
+  )
+
+  v(-1.2em)
+  table(inset: 0% + 10pt)[
+    #body
+  ]
 }
