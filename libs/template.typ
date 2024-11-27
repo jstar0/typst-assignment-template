@@ -310,5 +310,6 @@
   v(-1.2em)
   table(inset: 0% + 10pt)[
     #body
+    #v(1fr)
   ]
 }
