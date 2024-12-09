@@ -4,6 +4,7 @@
   main: "Times New Roman",
   mono: "JetBrainsMono NF",
   cjk: "Noto Serif CJK SC",
+  emph-cjk: "KaiTi",
   math: "IBM Plex Math",
   math-cjk: "Noto Serif CJK SC",
 )
@@ -179,6 +180,7 @@
 
   /// 设置字体。
   set text(font: (font.main, font.cjk), size: size, lang: lang, region: region)
+  show emph: text.with(font:(font.main, font.emph-cjk))
   let cjk-markers = regex("[“”‘’．，。、？！：；（）｛｝［］〔〕〖〗《》〈〉「」【】『』─—＿·…\u{30FC}]+")
   show cjk-markers: set text(font: font.cjk)
   show raw: it => {
