@@ -31,7 +31,7 @@
   - Noto Serif CJK SC
   - IBM Plex Math
   添加汉字_强调_之#emph[支持]：
-  - KaiTi
+  - FZKai-Z03S
 
   原模板的要求如下：
 

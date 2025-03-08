@@ -4,7 +4,7 @@
   main: "Times New Roman",
   mono: "JetBrainsMono NF",
   cjk: "Noto Serif CJK SC",
-  emph-cjk: "KaiTi",
+  emph-cjk: "FZKai-Z03S",
   math: "IBM Plex Math",
   math-cjk: "Noto Serif CJK SC",
 )
